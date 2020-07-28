@@ -2,11 +2,13 @@
  * @packageDocumentation
  * @ignore
  */
-import * as dat from "dat.gui";
 import * as MP from "@bandaloo/merge-pass";
+import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import { foggyrays, FoggyRaysExpr } from "./foggyrays";
-import { Vignette, vignette } from "./vignette";
+import { vignette, Vignette } from "./vignette";
+import { Merger } from "@bandaloo/merge-pass";
+import { BlurAndTrace } from "./blurandtrace";
 
 const slow = false;
 
@@ -99,6 +101,59 @@ const demos: Demos = {
       },
     };
   },
+
+  blurandtracescene: () => {
+    let bt: BlurAndTrace;
+    const merger = new Merger([(bt = new BlurAndTrace())], sourceCanvas, gl, {
+      channels: [null],
+    });
+
+    class BlurAndTraceControls {
+      brightness = 1;
+      blur = 1;
+    }
+
+    const controls = new BlurAndTraceControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "brightness", -1, 1, 0.01);
+    gui.add(controls, "blur", 0, 2, 0.01);
+
+    return {
+      merger: merger,
+      change: () => {
+        bt.setBlurSize(controls.blur);
+        bt.setBrightness(controls.brightness);
+      },
+    };
+  },
+
+  blurandtracedepth: (channels: TexImageSource[] = []) => {
+    let bt: BlurAndTrace;
+    const merger = new Merger(
+      [(bt = new BlurAndTrace(MP.mut(1), MP.mut(1), 4, 13, 0, true))],
+      sourceCanvas,
+      gl,
+      { channels: channels }
+    );
+
+    class BlurAndTraceControls {
+      brightness = 1;
+      blur = 1;
+    }
+
+    const controls = new BlurAndTraceControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "brightness", -1, 1, 0.01);
+    gui.add(controls, "blur", 0, 2, 0.01);
+
+    return {
+      merger: merger,
+      change: () => {
+        bt.setBlurSize(controls.blur);
+        bt.setBrightness(controls.brightness);
+      },
+    };
+  },
 };
 
 interface Draws {
@@ -110,11 +165,14 @@ interface Draws {
   ) => void)[];
 }
 
-// canvas drawing loops
-
 const draws: Draws = {
   foggyrays: [A.higherOrderDonuts(true), A.higherOrderDonuts(false)],
   vignette: [A.redSpiral],
+  blurandtracescene: [A.higherOrderPerspective(true)],
+  blurandtracedepth: [
+    A.higherOrderPerspective(true),
+    A.higherOrderPerspective(false),
+  ],
 };
 
 interface Notes {
@@ -122,7 +180,18 @@ interface Notes {
 }
 
 const notes: Notes = {
-  foggyrays: "this is a test <code>test</code>",
+  foggyrays:
+    "this adds some texture to the effect you would normally get with <code>godrays</code>",
+  vignette: "this effect blurs and darkens the edges",
+  blurandtracescene:
+    "this effect blurs the scene and traces back over it with lines. you need to supply a " +
+    "<code>null</code> scratch texture for this method. by default <blurandtrace> looks for " +
+    "this texture in channel 0 (see <code>channels</code> in the code below)",
+  blurandtracedepth:
+    "you can use <code>blurandtrace</code> with the depth buffer to get an even " +
+    "better effect compared to only using the scene buffer. the lines will naturally get " +
+    "lighter in the distance with this method. set the final argument of <code>blurandtrace</code> " +
+    "to true",
 };
 
 const canvases = [sourceCanvas];
