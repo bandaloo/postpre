@@ -6,6 +6,7 @@ import * as dat from "dat.gui";
 import * as MP from "@bandaloo/merge-pass";
 import * as A from "./exampleanimations";
 import { foggyrays, FoggyRaysExpr } from "./src/foggyrays";
+import { Vignette, vignette } from "./vignette";
 
 const slow = false;
 
@@ -72,6 +73,32 @@ const demos: Demos = {
       },
     };
   },
+
+  vignette: () => {
+    let v: Vignette;
+    const merger = new MP.Merger([(v = vignette())], sourceCanvas, gl);
+
+    class VignetteControls {
+      blur = 3;
+      brightness = 1.8;
+      exponent = 1.8;
+    }
+
+    const controls = new VignetteControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "blur", 1, 6, 0.01);
+    gui.add(controls, "brightness", 0.5, 5, 0.01);
+    gui.add(controls, "exponent", 0.5, 4, 0.01);
+
+    return {
+      merger: merger,
+      change: () => {
+        v.setBlurScalar(controls.blur);
+        v.setBrightnessScalar(controls.brightness);
+        v.setBrightnessExponent(controls.exponent);
+      },
+    };
+  },
 };
 
 interface Draws {
@@ -87,6 +114,7 @@ interface Draws {
 
 const draws: Draws = {
   foggyrays: [A.higherOrderDonuts(true), A.higherOrderDonuts(false)],
+  vignette: [A.redSpiral],
 };
 
 interface Notes {

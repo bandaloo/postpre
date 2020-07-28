@@ -20,6 +20,10 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
   speedFloat: BasicFloat;
   throwDistanceFloat: BasicFloat;
 
+  period: Float;
+  speed: Float;
+  throwDistance: Float;
+
   constructor(
     period: Float = mut(100),
     speed: Float = mut(1),
@@ -73,19 +77,28 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
     this.periodFloat = periodFloat;
     this.speedFloat = speedFloat;
     this.throwDistanceFloat = throwDistanceFloat;
+
+    this.period = period;
+    this.speed = speed;
+    this.throwDistance = throwDistance;
   }
 
   setPeriod(period: PrimitiveFloat | number) {
     this.periodFloat.setVal(wrapInValue(period));
+    this.period = wrapInValue(period);
   }
 
   setSpeed(speed: PrimitiveFloat | number) {
     this.speedFloat.setVal(wrapInValue(speed));
+    this.speed = wrapInValue(speed);
   }
 
   setThrowDistance(throwDistance: PrimitiveFloat | number) {
     this.throwDistanceFloat.setVal(wrapInValue(throwDistance));
+    this.throwDistance = wrapInValue(throwDistance);
   }
+
+  // TODO set convert depth color with warning
 }
 
 export function foggyrays(
