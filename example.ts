@@ -60,7 +60,7 @@ const demos: Demos = {
     const controls = new BlurControls();
     const gui = new dat.GUI();
     gui.add(controls, "period", 10, 300);
-    gui.add(controls, "speed", 0.2, 10, 0.1);
+    gui.add(controls, "speed", 0.2, 30, 0.1);
     gui.add(controls, "throwDistance", 0.1, 1, 0.01);
 
     return {
