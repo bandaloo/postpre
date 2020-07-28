@@ -5,7 +5,7 @@
 import * as dat from "dat.gui";
 import * as MP from "@bandaloo/merge-pass";
 import * as A from "./exampleanimations";
-import { foggyrays, FoggyRaysExpr } from "./src/foggyrays";
+import { foggyrays, FoggyRaysExpr } from "./foggyrays";
 import { Vignette, vignette } from "./vignette";
 
 const slow = false;
