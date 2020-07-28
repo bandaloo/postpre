@@ -1,0 +1,6 @@
+dist/example.*
+dist/exampleanimations.*
+example.html
+bundle.js
+src
+docs
