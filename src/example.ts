@@ -6,6 +6,7 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
+import { vignette } from "./vignette";
 
 const slow = false;
 
@@ -213,6 +214,20 @@ const demos: Demos = {
       },
     };
   },
+
+  oldfilm: (channels: TexImageSource[] = []) => {
+    const merger = new MP.Merger(
+      [new P.OldFilm(), vignette(3, 1.5)],
+      sourceCanvas,
+      gl,
+      { channels: channels }
+    );
+
+    return {
+      merger: merger,
+      change: () => {},
+    };
+  },
 };
 
 interface Draws {
@@ -234,6 +249,7 @@ const draws: Draws = {
   ],
   lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
   noisedisplacement: [A.higherOrderSpiral([0, 0, 255], [255, 255, 255])],
+  oldfilm: [A.higherOrderSpiral([0, 0, 255], [255, 255, 0])],
 };
 
 interface Notes {
@@ -312,7 +328,7 @@ window.addEventListener("load", () => {
   if (demo === undefined) throw new Error("merger not found");
 
   (document.getElementById("title") as HTMLElement).innerText =
-    "merge-pass demo: " + mstr;
+    "postpre demo: " + mstr;
 
   // unindent code string
   let codeStr = (" ".repeat(4) + demos[mstr])
