@@ -5,10 +5,8 @@
 import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
-import { foggyrays, FoggyRaysExpr } from "./foggyrays";
-import { vignette, Vignette } from "./vignette";
-import { Merger } from "@bandaloo/merge-pass";
-import { BlurAndTrace } from "./blurandtrace";
+import * as P from "./index";
+import { mut } from "@bandaloo/merge-pass";
 
 const slow = false;
 
@@ -49,8 +47,8 @@ interface Demos {
 
 const demos: Demos = {
   foggyrays: (channels: TexImageSource[] = []) => {
-    let fg: FoggyRaysExpr;
-    const merger = new MP.Merger([(fg = foggyrays())], sourceCanvas, gl, {
+    let fg: P.FoggyRaysExpr;
+    const merger = new MP.Merger([(fg = P.foggyrays())], sourceCanvas, gl, {
       channels: channels,
     });
 
@@ -58,6 +56,7 @@ const demos: Demos = {
       period = 100;
       speed = 1;
       throwDistance = 0.3;
+      newColorG = 0.3;
     }
 
     const controls = new BlurControls();
@@ -77,8 +76,8 @@ const demos: Demos = {
   },
 
   vignette: () => {
-    let v: Vignette;
-    const merger = new MP.Merger([(v = vignette())], sourceCanvas, gl);
+    let v: P.Vignette;
+    const merger = new MP.Merger([(v = P.vignette())], sourceCanvas, gl);
 
     class VignetteControls {
       blur = 3;
@@ -103,8 +102,8 @@ const demos: Demos = {
   },
 
   blurandtracescene: () => {
-    let bt: BlurAndTrace;
-    const merger = new Merger([(bt = new BlurAndTrace())], sourceCanvas, gl, {
+    let bt: P.BlurAndTrace;
+    const merger = new MP.Merger([(bt = P.blurandtrace())], sourceCanvas, gl, {
       channels: [null],
     });
 
@@ -128,9 +127,9 @@ const demos: Demos = {
   },
 
   blurandtracedepth: (channels: TexImageSource[] = []) => {
-    let bt: BlurAndTrace;
-    const merger = new Merger(
-      [(bt = new BlurAndTrace(MP.mut(1), MP.mut(1), 4, 13, 0, true))],
+    let bt: P.BlurAndTrace;
+    const merger = new MP.Merger(
+      [(bt = P.blurandtrace(MP.mut(1), MP.mut(1), 4, 13, 0, true))],
       sourceCanvas,
       gl,
       { channels: channels }
@@ -154,6 +153,34 @@ const demos: Demos = {
       },
     };
   },
+
+  lightbands: (channels: TexImageSource[] = []) => {
+    let lb: P.LightBands;
+    const merger = new MP.Merger([(lb = P.lightbands())], sourceCanvas, gl, {
+      channels: channels,
+    });
+
+    class LightBandsControls {
+      speed = 4;
+      intensity = 0.3;
+      threshold = 0.01;
+    }
+
+    const controls = new LightBandsControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "speed", 1, 20);
+    gui.add(controls, "intensity", 0.1, 1, 0.01);
+    gui.add(controls, "threshold", 0.01, 0.3);
+
+    return {
+      merger: merger,
+      change: () => {
+        lb.setSpeed(controls.speed);
+        lb.setIntensity(controls.intensity);
+        lb.setThreshold(controls.threshold);
+      },
+    };
+  },
 };
 
 interface Draws {
@@ -173,6 +200,7 @@ const draws: Draws = {
     A.higherOrderPerspective(true),
     A.higherOrderPerspective(false),
   ],
+  lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
 };
 
 interface Notes {
@@ -192,6 +220,8 @@ const notes: Notes = {
     "better effect compared to only using the scene buffer. the lines will naturally get " +
     "lighter in the distance with this method. set the final argument of <code>blurandtrace</code> " +
     "to true",
+  lightbands:
+    "you can light up and darken strips of your scene if you supply a depth buffer",
 };
 
 const canvases = [sourceCanvas];
@@ -202,7 +232,7 @@ let key: string;
 
 window.addEventListener("load", () => {
   MP.settings.verbosity = 1;
-  MP.settings.offset = 3;
+  MP.settings.offset = 0;
   console.log("offset", MP.settings.offset);
   let mstr = getVariable("m");
   let dstr = getVariable("d");
@@ -249,7 +279,6 @@ window.addEventListener("load", () => {
     "merge-pass demo: " + mstr;
 
   // unindent code string
-  // only replace leading spaces with nbsp
   let codeStr = (" ".repeat(4) + demos[mstr])
     .split("\n")
     .map((l) => l.substr(4))

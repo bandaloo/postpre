@@ -13,16 +13,21 @@ import {
   float,
   BasicFloat,
   PrimitiveFloat,
+  GodRaysExpr,
+  PrimitiveVec4,
 } from "@bandaloo/merge-pass";
 
 export class FoggyRaysExpr extends WrappedExpr<Vec4> {
   periodFloat: BasicFloat;
   speedFloat: BasicFloat;
   throwDistanceFloat: BasicFloat;
+  godraysExpr: GodRaysExpr;
 
   period: Float;
   speed: Float;
   throwDistance: Float;
+
+  convertsDepth: boolean;
 
   constructor(
     period: Float = mut(100),
@@ -61,6 +66,7 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
       0.5
     );
 
+    // TODO get rid of the mut
     const expr = godrays({
       weight: 0.009,
       density: op(throwDistanceFloat, "+", op(fog, "*", 0.5)),
@@ -77,6 +83,9 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
     this.periodFloat = periodFloat;
     this.speedFloat = speedFloat;
     this.throwDistanceFloat = throwDistanceFloat;
+    //this.godraysExpr = convertDepthColor !== undefined ? expr : undefined;
+    this.godraysExpr = expr;
+    this.convertsDepth = convertDepthColor !== undefined;
 
     this.period = period;
     this.speed = speed;
@@ -98,7 +107,15 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
     this.throwDistance = wrapInValue(throwDistance);
   }
 
-  // TODO set convert depth color with warning
+  // TODO test this
+  setNewColor(newColor: PrimitiveVec4) {
+    if (this.convertsDepth === undefined) {
+      throw new Error(
+        "can only set new color if you are converting from a depth buffer"
+      );
+    }
+    this.godraysExpr.setNewColor(newColor);
+  }
 }
 
 export function foggyrays(
