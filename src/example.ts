@@ -6,7 +6,6 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
-import { vignette } from "./vignette";
 
 const slow = false;
 
@@ -216,16 +215,33 @@ const demos: Demos = {
   },
 
   oldfilm: (channels: TexImageSource[] = []) => {
+    let olf: P.OldFilm;
     const merger = new MP.Merger(
-      [new P.OldFilm(), vignette(3, 1.5)],
+      [(olf = P.oldfilm()), P.vignette(3, 1.5)],
       sourceCanvas,
       gl,
       { channels: channels }
     );
 
+    class OldFilmControls {
+      specks = 0.4;
+      lines = 0.25;
+      grain = 0.11;
+    }
+
+    const controls = new OldFilmControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "specks", 0, 1, 0.01);
+    gui.add(controls, "lines", 0, 1, 0.01);
+    gui.add(controls, "grain", 0, 1, 0.01);
+
     return {
       merger: merger,
-      change: () => {},
+      change: () => {
+        olf.setSpeckIntensity(controls.specks);
+        olf.setLineIntensity(controls.lines);
+        olf.setGrainIntensity(controls.grain);
+      },
     };
   },
 };
