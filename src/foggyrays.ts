@@ -83,7 +83,6 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
     this.periodFloat = periodFloat;
     this.speedFloat = speedFloat;
     this.throwDistanceFloat = throwDistanceFloat;
-    //this.godraysExpr = convertDepthColor !== undefined ? expr : undefined;
     this.godraysExpr = expr;
     this.convertsDepth = convertDepthColor !== undefined;
 

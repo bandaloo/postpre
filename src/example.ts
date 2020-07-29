@@ -181,6 +181,39 @@ const demos: Demos = {
       },
     };
   },
+
+  noisedisplacement: (channels: TexImageSource[] = []) => {
+    let nd: P.NoiseDisplacement;
+    const merger = new MP.Merger(
+      [(nd = new P.NoiseDisplacement())],
+      sourceCanvas,
+      gl,
+      {
+        channels: channels,
+      }
+    );
+
+    class LightBandsControls {
+      period = 0.1;
+      speed = 1;
+      intensity = 0.005;
+    }
+
+    const controls = new LightBandsControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "period", 0.01, 1, 0.01);
+    gui.add(controls, "speed", -2, 2);
+    gui.add(controls, "intensity", 0.005, 0.5, 0.005);
+
+    return {
+      merger: merger,
+      change: () => {
+        nd.setPeriod(controls.period);
+        nd.setSpeed(controls.speed);
+        nd.setIntensity(controls.intensity);
+      },
+    };
+  },
 };
 
 interface Draws {
@@ -201,6 +234,7 @@ const draws: Draws = {
     A.higherOrderPerspective(false),
   ],
   lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
+  noisedisplacement: [A.redSpiral],
 };
 
 interface Notes {
