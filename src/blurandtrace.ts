@@ -19,12 +19,12 @@ export class BlurAndTrace extends EffectLoop {
   blurSize: Float;
 
   constructor(
-    brightness: Float = mut(1),
-    blurSize: Float = mut(1),
-    reps = 4,
-    taps: 5 | 9 | 13 = 9,
-    samplerNum = 0,
-    useDepth = false
+    brightness: Float,
+    blurSize: Float,
+    reps: number,
+    taps: 5 | 9 | 13,
+    samplerNum: number,
+    useDepth: boolean
   ) {
     const brightnessFloat = float(brightness);
     const blurSizeFloat = float(blurSize);
@@ -55,16 +55,16 @@ export class BlurAndTrace extends EffectLoop {
 }
 
 export function blurandtrace(
-  brightness?: Float,
-  blurSize?: Float,
-  reps?: number,
-  taps?: 5 | 9 | 13,
-  samplerNum?: number,
-  useDepth?: boolean
+  brightness: Float | number = mut(1),
+  blurSize: Float | number = mut(1),
+  reps = 4,
+  taps: 5 | 9 | 13 = 9,
+  samplerNum = 0,
+  useDepth = false
 ) {
   return new BlurAndTrace(
-    brightness,
-    blurSize,
+    wrapInValue(brightness),
+    wrapInValue(blurSize),
     reps,
     taps,
     samplerNum,

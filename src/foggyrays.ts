@@ -30,10 +30,10 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
   convertsDepth: boolean;
 
   constructor(
-    period: Float = mut(100),
-    speed: Float = mut(1),
-    throwDistance: Float = mut(0.3),
-    numSamples = 100,
+    period: Float,
+    speed: Float,
+    throwDistance: Float,
+    numSamples: number,
     samplerNum?: number,
     convertDepthColor?: Vec4
   ) {
@@ -66,7 +66,6 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
       0.5
     );
 
-    // TODO get rid of the mut
     const expr = godrays({
       weight: 0.009,
       density: op(throwDistanceFloat, "+", op(fog, "*", 0.5)),
@@ -106,7 +105,6 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
     this.throwDistance = wrapInValue(throwDistance);
   }
 
-  // TODO test this
   setNewColor(newColor: PrimitiveVec4) {
     if (this.convertsDepth === undefined) {
       throw new Error(
@@ -118,10 +116,10 @@ export class FoggyRaysExpr extends WrappedExpr<Vec4> {
 }
 
 export function foggyrays(
-  period?: Float | number,
-  speed?: Float | number,
-  throwDistance?: Float | number,
-  numSamples?: number,
+  period: Float | number = mut(100),
+  speed: Float | number = mut(1),
+  throwDistance: Float | number = mut(0.3),
+  numSamples = 100,
   samplerNum?: number,
   convertDepthColor?: Vec4
 ) {

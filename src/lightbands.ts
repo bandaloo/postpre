@@ -27,10 +27,10 @@ export class LightBands extends WrappedExpr<Vec4> {
   threshold: Float;
 
   constructor(
-    speed: Float = mut(4),
-    intensity: Float = mut(0.3),
-    threshold: Float = mut(0.01),
-    samplerNum = 0
+    speed: Float,
+    intensity: Float,
+    threshold: Float,
+    samplerNum: number
   ) {
     const speedFloat = float(speed);
     const intensityFloat = float(intensity);
@@ -82,10 +82,10 @@ export class LightBands extends WrappedExpr<Vec4> {
 }
 
 export function lightbands(
-  speed?: Float | number,
-  intensity?: Float | number,
-  threshold?: Float | number,
-  samplerNum?: number
+  speed: Float | number = mut(4),
+  intensity: Float | number = mut(0.3),
+  threshold: Float | number = mut(0.01),
+  samplerNum = 0
 ) {
   return new LightBands(
     wrapInValue(speed),

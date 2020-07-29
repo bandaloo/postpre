@@ -19,7 +19,6 @@ import {
   get2comp,
 } from "@bandaloo/merge-pass";
 
-// offsets so noise will never overlap directly
 const X_OFF = 1234;
 const Y_OFF = 5678;
 

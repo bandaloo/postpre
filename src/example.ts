@@ -6,7 +6,6 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
-import { mut } from "@bandaloo/merge-pass";
 
 const slow = false;
 
@@ -234,7 +233,7 @@ const draws: Draws = {
     A.higherOrderPerspective(false),
   ],
   lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
-  noisedisplacement: [A.redSpiral],
+  noisedisplacement: [A.higherOrderSpiral([0, 0, 255], [255, 255, 255])],
 };
 
 interface Notes {
@@ -256,6 +255,9 @@ const notes: Notes = {
     "to true",
   lightbands:
     "you can light up and darken strips of your scene if you supply a depth buffer",
+  noisedisplacement:
+    "depending on the parameters, <code>noisedisplacement</code> can make things look as though " +
+    "they are underwater or behind textured glass",
 };
 
 const canvases = [sourceCanvas];

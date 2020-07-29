@@ -24,9 +24,9 @@ export class Vignette extends EffectLoop {
   brightnessExponent: Float;
 
   constructor(
-    blurScalar: Float = mut(3),
-    brightnessScalar: Float = mut(1.8),
-    brightnessExponent: Float = mut(1.8)
+    blurScalar: Float,
+    brightnessScalar: Float,
+    brightnessExponent: Float
   ) {
     const blurScalarFloat = float(blurScalar);
     const brightnessScalarFloat = float(brightnessScalar);
@@ -66,9 +66,9 @@ export class Vignette extends EffectLoop {
 }
 
 export function vignette(
-  blurScalar?: Float | number,
-  brightnessScalar?: Float | number,
-  brightnessExponent?: Float | number
+  blurScalar: Float | number = mut(3),
+  brightnessScalar: Float | number = mut(1.8),
+  brightnessExponent: Float | number = mut(1.8)
 ) {
   return new Vignette(
     wrapInValue(blurScalar),
