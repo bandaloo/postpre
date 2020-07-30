@@ -244,6 +244,21 @@ const demos: Demos = {
       },
     };
   },
+
+  kaleidoscope: (channels: TexImageSource[] = []) => {
+    let ka: P.Kaleidoscope;
+    const merger = new MP.Merger(
+      [(ka = new P.Kaleidoscope())],
+      sourceCanvas,
+      gl,
+      { channels: channels }
+    );
+
+    return {
+      merger: merger,
+      change: () => {},
+    };
+  },
 };
 
 interface Draws {
@@ -266,6 +281,7 @@ const draws: Draws = {
   lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
   noisedisplacement: [A.higherOrderSpiral([0, 0, 255], [255, 255, 255])],
   oldfilm: [A.higherOrderSpiral([0, 0, 255], [255, 255, 0])],
+  kaleidoscope: [A.redSpiral],
 };
 
 interface Notes {
