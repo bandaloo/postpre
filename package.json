@@ -30,5 +30,7 @@
     "watchify": "^3.11.1"
   },
   "types": "dist/index.d.ts",
-  "dependencies": {}
+  "dependencies": {
+    "@bandaloo/merge-pass": "^0.6.0"
+  }
 }
