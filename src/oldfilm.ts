@@ -45,11 +45,10 @@ export class OldFilm extends WrappedExpr<Vec4> {
       "*",
       grainIntensityFloat
     );
-    // mod is to wrap values back around
     const rpos = a2(
       "mod",
       op(pos(), "+", random(vec2(ftime, 0))),
-      vec2(10000, 10000)
+      vec2(100, 100)
     );
     const lines = op(
       a2("pow", a1("sin", getcomp(op(rpos, "/", period), "x")), 3000),
@@ -57,13 +56,17 @@ export class OldFilm extends WrappedExpr<Vec4> {
       op(
         op(random(vec2(ftime, 0)), "*", op(lineIntensityFloat, "*", -1)),
         "+",
-        op(lineIntensityFloat, "/", 5)
+        op(lineIntensityFloat, "/", 4)
       )
     );
-    const spos = op(
-      op(pos(), "*", op(resolution(), "/", getcomp(resolution(), "y"))),
-      "+",
-      op(ftime, "*", 4)
+    const spos = a2(
+      "mod",
+      op(
+        op(pos(), "*", op(resolution(), "/", getcomp(resolution(), "y"))),
+        "+",
+        ftime
+      ),
+      vec2(100, 100)
     );
 
     // TODO consider adding an optional cue mark

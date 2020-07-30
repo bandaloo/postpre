@@ -290,6 +290,9 @@ const notes: Notes = {
   noisedisplacement:
     "depending on the parameters, <code>noisedisplacement</code> can make things look as though " +
     "they are underwater or behind textured glass",
+  oldfilm:
+    "this adds random vertical scratches and specks of dust, as well as film grain. this pairs " +
+    "nicely with <code>vignette</code>, as seen here",
 };
 
 const canvases = [sourceCanvas];
