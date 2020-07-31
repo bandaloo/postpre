@@ -1,51 +1,77 @@
 import {
-  WrappedExpr,
-  Vec4,
-  Float,
+  a1,
   a2,
+  BasicFloat,
+  channel,
+  Float,
+  float,
   getcomp,
+  op,
   pos,
+  PrimitiveFloat,
+  rotate,
   translate,
   vec2,
-  rotate,
-  channel,
-  op,
-  a1,
+  Vec4,
+  wrapInValue,
+  WrappedExpr,
+  mut,
+  brightness,
 } from "@bandaloo/merge-pass";
 
 export class Kaleidoscope extends WrappedExpr<Vec4> {
-  constructor() {
-    const sides = 8;
-    const tpos = translate(pos(), vec2(-0.5, -0.5));
+  sidesFloat: BasicFloat;
+  scaleFloat: BasicFloat;
+
+  sides: Float;
+  scale: Float;
+
+  constructor(sides: Float, scale: Float) {
+    const sidesFloat = float(sides);
+    const scaleFloat = float(scale);
+    const tpos = op(translate(pos(), vec2(-0.5, -0.5)), "/", scaleFloat);
     const angle = a2("atan", getcomp(tpos, "y"), getcomp(tpos, "x"));
-    /*
-    const mangle = op(
-      a1("floor", op(angle, "*", 2 * Math.PI * sides)),
-      "/",
-      2 * Math.PI * sides
-    );
-    */
-    const mangle = op(
-      a1("floor", op(angle, "/", 2 * Math.PI * (1 / sides))),
-      "*",
-      2 * Math.PI * (1 / sides)
-    );
+
+    const b = op(2 * Math.PI, "*", op(1, "/", sidesFloat));
+    const mangle = op(a1("floor", op(angle, "/", b)), "*", b);
 
     const a = op(angle, "-", mangle);
-    const b = 2 * Math.PI * (1 / sides);
     const flip = op(b, "-", op(2, "*", a));
 
-    //const sign = op(op(op(a2("mod", mangle, b * 2), "/", b), "+", 1), "/", 2);
-    const sign = op(a2("mod", mangle, b * 2), "/", b);
+    console.log("test!");
+    const sign = a1(
+      "floor",
+      op(a2("mod", op(mangle, "+", 0.1), op(b, "*", 2)), "/", b)
+    );
 
-    // rotate by angle
     const spos = translate(
-      rotate(
-        translate(pos(), vec2(-0.5, -0.5)),
-        op(mangle, "-", op(flip, "*", sign))
-      ),
+      rotate(tpos, op(mangle, "-", op(flip, "*", sign))),
       vec2(0.5, 0.5)
     );
+
     super(channel(-1, spos));
+
+    this.sidesFloat = sidesFloat;
+    this.scaleFloat = scaleFloat;
+
+    this.sides = sides;
+    this.scale = scale;
   }
+
+  setSides(sides: PrimitiveFloat | number) {
+    this.sidesFloat.setVal(wrapInValue(sides));
+    this.sides = wrapInValue(sides);
+  }
+
+  setScale(scale: PrimitiveFloat | number) {
+    this.scaleFloat.setVal(wrapInValue(scale));
+    this.scale = wrapInValue(scale);
+  }
+}
+
+export function kaleidoscope(
+  sides: Float | number = mut(8),
+  scale: Float | number = mut(1)
+) {
+  return new Kaleidoscope(wrapInValue(sides), wrapInValue(scale));
 }

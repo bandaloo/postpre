@@ -184,7 +184,7 @@ const demos: Demos = {
   noisedisplacement: (channels: TexImageSource[] = []) => {
     let nd: P.NoiseDisplacement;
     const merger = new MP.Merger(
-      [(nd = new P.NoiseDisplacement())],
+      [(nd = P.noisedisplacement())],
       sourceCanvas,
       gl,
       {
@@ -247,16 +247,26 @@ const demos: Demos = {
 
   kaleidoscope: (channels: TexImageSource[] = []) => {
     let ka: P.Kaleidoscope;
-    const merger = new MP.Merger(
-      [(ka = new P.Kaleidoscope())],
-      sourceCanvas,
-      gl,
-      { channels: channels }
-    );
+    const merger = new MP.Merger([(ka = P.kaleidoscope())], sourceCanvas, gl, {
+      channels: channels,
+    });
+
+    class KaleidoscopeControls {
+      sides = 8;
+      scale = 1;
+    }
+
+    const controls = new KaleidoscopeControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "sides", 1, 32, 0.5);
+    gui.add(controls, "scale", 1, 1.42, 0.01);
 
     return {
       merger: merger,
-      change: () => {},
+      change: () => {
+        ka.setSides(controls.sides);
+        ka.setScale(controls.scale);
+      },
     };
   },
 };
@@ -281,7 +291,7 @@ const draws: Draws = {
   lightbands: [A.higherOrderPerspective(true), A.higherOrderPerspective(false)],
   noisedisplacement: [A.higherOrderSpiral([0, 0, 255], [255, 255, 255])],
   oldfilm: [A.higherOrderSpiral([0, 0, 255], [255, 255, 0])],
-  kaleidoscope: [A.redSpiral],
+  kaleidoscope: [A.higherOrderGoo(true)],
 };
 
 interface Notes {

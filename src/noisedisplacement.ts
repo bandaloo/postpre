@@ -31,11 +31,7 @@ export class NoiseDisplacement extends WrappedExpr<Vec4> {
   speed: Float;
   intensity: Float;
 
-  constructor(
-    period: Float = mut(0.1),
-    speed: Float = mut(1),
-    intensity: Float = mut(0.005)
-  ) {
+  constructor(period: Float, speed: Float, intensity: Float) {
     const periodFloat = float(period);
     const speedFloat = float(speed);
     const intensityFloat = float(intensity);
@@ -95,4 +91,12 @@ export class NoiseDisplacement extends WrappedExpr<Vec4> {
     this.intensityFloat.setVal(wrapInValue(intensity));
     this.speed = wrapInValue(intensity);
   }
+}
+
+export function noisedisplacement(
+  period: Float = mut(0.1),
+  speed: Float = mut(1),
+  intensity: Float = mut(0.005)
+) {
+  return new NoiseDisplacement(period, speed, intensity);
 }
