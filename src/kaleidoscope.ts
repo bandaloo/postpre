@@ -16,7 +16,6 @@ import {
   wrapInValue,
   WrappedExpr,
   mut,
-  brightness,
 } from "@bandaloo/merge-pass";
 
 export class Kaleidoscope extends WrappedExpr<Vec4> {

@@ -6,6 +6,7 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
+import { CelShade } from "./celshade";
 
 const slow = false;
 
@@ -245,7 +246,7 @@ const demos: Demos = {
     };
   },
 
-  kaleidoscope: (channels: TexImageSource[] = []) => {
+  kaleidoscopscope: (channels: TexImageSource[] = []) => {
     let ka: P.Kaleidoscope;
     const merger = new MP.Merger([(ka = P.kaleidoscope())], sourceCanvas, gl, {
       channels: channels,
@@ -267,6 +268,16 @@ const demos: Demos = {
         ka.setSides(controls.sides);
         ka.setScale(controls.scale);
       },
+    };
+  },
+
+  celshade: (channels: TexImageSource[] = []) => {
+    const merger = new MP.Merger([new CelShade()], sourceCanvas, gl, {
+      channels: channels,
+    });
+    return {
+      merger: merger,
+      change: () => {},
     };
   },
 };
@@ -292,6 +303,7 @@ const draws: Draws = {
   noisedisplacement: [A.higherOrderSpiral([0, 0, 255], [255, 255, 255])],
   oldfilm: [A.higherOrderSpiral([0, 0, 255], [255, 255, 0])],
   kaleidoscope: [A.higherOrderGoo(true)],
+  celshade: [A.celTest],
 };
 
 interface Notes {

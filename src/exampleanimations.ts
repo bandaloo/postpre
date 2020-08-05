@@ -299,3 +299,20 @@ export const bloomTest = (
     );
   }
 };
+
+export const celTest = (
+  t: number,
+  frames: number,
+  x: CanvasRenderingContext2D,
+  c: HTMLCanvasElement
+) => {
+  x.fillStyle = "white";
+  x.fillRect(0, 0, 960, 540);
+  const g = x.createRadialGradient(480, 270, 0, 400, 200, 200);
+  g.addColorStop(0, "#ff0000");
+  g.addColorStop(1, "#330000");
+  x.fillStyle = g;
+  x.beginPath();
+  x.arc(480, 270, 200, 0, 2 * Math.PI);
+  x.fill();
+};
