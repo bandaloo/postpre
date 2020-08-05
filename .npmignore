@@ -5,3 +5,5 @@ bundle.js
 src
 docs
 images
+p5*
+dist/p5*

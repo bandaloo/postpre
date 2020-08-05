@@ -10,7 +10,8 @@
     "buildwatch": "npx tsc -w --outDir dist",
     "bundlewatch": "npx watchify dist/example.js -o bundle.js",
     "prepublish": "npm run build",
-    "docs": "npx typedoc --out docs src"
+    "docs": "npx typedoc --out docs src",
+    "p5": "npx browserify dist/p5index.js -o p5bundle.js && (echo \"// @ts-nocheck\" && cat p5bundle.js) > tempfile && mv tempfile p5bundle.js"
   },
   "keywords": [
     "glsl",
