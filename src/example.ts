@@ -226,7 +226,7 @@ const demos: Demos = {
 
     class OldFilmControls {
       specks = 0.4;
-      lines = 0.25;
+      lines = 0.12;
       grain = 0.11;
     }
 

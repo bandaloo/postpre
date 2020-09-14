@@ -50,15 +50,56 @@ export class OldFilm extends WrappedExpr<Vec4> {
       op(pos(), "+", random(vec2(ftime, 0))),
       vec2(100, 100)
     );
-    const lines = op(
-      a2("pow", a1("sin", getcomp(op(rpos, "/", period), "x")), 3000),
+    //abs(2.*fract(rate * uv.x + 0.5)-1.);
+    const rate = 10;
+    /*
+    const triangles = op(
+      a1(
+        "abs",
+        op(
+          2,
+          "*",
+          a1(
+            "fract",
+            op(op(op(rate, "*", getcomp(pos(), "x")), "+", 0.5), "-", 1)
+          )
+        )
+      ),
       "*",
+      lineIntensityFloat
+    );
+    */
+    const triangles = op(
       op(
-        op(random(vec2(ftime, 0)), "*", op(lineIntensityFloat, "*", -1)),
-        "+",
-        op(lineIntensityFloat, "/", 4)
+        op(
+          a1(
+            "abs",
+            op(
+              op(2, "*", a1("fract", op(rate, "*", getcomp(pos(), "x")))),
+              "-",
+              1
+            )
+          ),
+          "-",
+          0.5
+        ),
+        "*",
+        2
+      ),
+      "*",
+      lineIntensityFloat
+    );
+    //step(1. - 1. / rate, mod(uv.x, 1.));
+    const stepping = a2(
+      "step",
+      op(1, "-", op(1, "/", rate * 12)),
+      a2(
+        "mod",
+        op(getcomp(pos(), "x"), "+", random(op(vec2(50, 50), "*", time()))),
+        1
       )
     );
+    const lines = op(triangles, "*", stepping);
     const spos = a2(
       "mod",
       op(
@@ -68,8 +109,6 @@ export class OldFilm extends WrappedExpr<Vec4> {
       ),
       vec2(100, 100)
     );
-
-    // TODO consider adding an optional cue mark
 
     const fsimplex = op(op(simplex(op(spos, "*", 7)), "*", 0.44), "+", 0.5);
     const spots = op(a2("step", fsimplex, 0.08), "*", speckIntensityFloat);
@@ -102,7 +141,7 @@ export class OldFilm extends WrappedExpr<Vec4> {
 
 export function oldfilm(
   speckIntensity: Float | number = mut(0.4),
-  lineIntensity: Float | number = mut(0.25),
+  lineIntensity: Float | number = mut(0.12),
   grainIntensity: Float | number = mut(0.11)
 ) {
   return new OldFilm(
