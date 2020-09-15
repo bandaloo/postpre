@@ -246,7 +246,7 @@ const demos: Demos = {
     };
   },
 
-  kaleidoscopscope: (channels: TexImageSource[] = []) => {
+  kaleidoscope: (channels: TexImageSource[] = []) => {
     let ka: P.Kaleidoscope;
     const merger = new MP.Merger([(ka = P.kaleidoscope())], sourceCanvas, gl, {
       channels: channels,
