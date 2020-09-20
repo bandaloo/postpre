@@ -1,6 +1,6 @@
 {
   "name": "postpre",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "preset effects built from the post-processing library merge-pass",
   "main": "dist/index.js",
   "scripts": {
