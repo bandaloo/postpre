@@ -37,7 +37,6 @@ export class Kaleidoscope extends WrappedExpr<Vec4> {
     const a = op(angle, "-", mangle);
     const flip = op(b, "-", op(2, "*", a));
 
-    console.log("test!");
     const sign = a1(
       "floor",
       op(a2("mod", op(mangle, "+", 0.1), op(b, "*", 2)), "/", b)
