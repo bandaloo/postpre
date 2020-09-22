@@ -94,9 +94,13 @@ export class NoiseDisplacement extends WrappedExpr<Vec4> {
 }
 
 export function noisedisplacement(
-  period: Float = mut(0.1),
-  speed: Float = mut(1),
-  intensity: Float = mut(0.005)
+  period: Float | number = mut(0.1),
+  speed: Float | number = mut(1),
+  intensity: Float | number = mut(0.005)
 ) {
-  return new NoiseDisplacement(period, speed, intensity);
+  return new NoiseDisplacement(
+    wrapInValue(period),
+    wrapInValue(speed),
+    wrapInValue(intensity)
+  );
 }
