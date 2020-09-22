@@ -38,37 +38,13 @@ export class OldFilm extends WrappedExpr<Vec4> {
     const speckIntensityFloat = float(speckIntensity);
     const lineIntensityFloat = float(lineIntensity);
     const grainIntensityFloat = float(grainIntensity);
-    const period = 1 / 3;
     const ftime = a1("floor", op(time(), "*", 24));
     const grainy = op(
       random(op(pixel(), "+", a2("mod", op(ftime, "*", 99), 3000))),
       "*",
       grainIntensityFloat
     );
-    const rpos = a2(
-      "mod",
-      op(pos(), "+", random(vec2(ftime, 0))),
-      vec2(100, 100)
-    );
-    //abs(2.*fract(rate * uv.x + 0.5)-1.);
     const rate = 10;
-    /*
-    const triangles = op(
-      a1(
-        "abs",
-        op(
-          2,
-          "*",
-          a1(
-            "fract",
-            op(op(op(rate, "*", getcomp(pos(), "x")), "+", 0.5), "-", 1)
-          )
-        )
-      ),
-      "*",
-      lineIntensityFloat
-    );
-    */
     const triangles = op(
       op(
         op(
@@ -89,7 +65,6 @@ export class OldFilm extends WrappedExpr<Vec4> {
       "*",
       lineIntensityFloat
     );
-    //step(1. - 1. / rate, mod(uv.x, 1.));
     const stepping = a2(
       "step",
       op(1, "-", op(1, "/", rate * 12)),

@@ -6,7 +6,7 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
-import { CelShade } from "./celshade";
+import { celshade, CelShade } from "./celshade";
 
 const slow = false;
 
@@ -272,12 +272,33 @@ const demos: Demos = {
   },
 
   celshade: (channels: TexImageSource[] = []) => {
-    const merger = new MP.Merger([new CelShade()], sourceCanvas, gl, {
+    let cs: CelShade;
+    const merger = new MP.Merger([(cs = celshade())], sourceCanvas, gl, {
       channels: channels,
     });
+
+    class CelShadeControls {
+      mult = 0.8;
+      bump = 0.3;
+      center = 0.3;
+      edge = 0.03;
+    }
+
+    const controls = new CelShadeControls();
+    const gui = new dat.GUI();
+    gui.add(controls, "mult", 0, 1, 0.01);
+    gui.add(controls, "bump", 0, 1, 0.01);
+    gui.add(controls, "center", 0, 1, 0.01);
+    gui.add(controls, "edge", 0, 0.1, 0.01);
+
     return {
       merger: merger,
-      change: () => {},
+      change: () => {
+        cs.setMult(controls.mult);
+        cs.setBump(controls.bump);
+        cs.setCenter(controls.center);
+        cs.setEdge(controls.edge);
+      },
     };
   },
 };
