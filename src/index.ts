@@ -5,3 +5,4 @@ export * from "./lightbands";
 export * from "./noisedisplacement";
 export * from "./oldfilm";
 export * from "./kaleidoscope";
+export * from "./celshade";

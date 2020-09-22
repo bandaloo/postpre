@@ -6,7 +6,6 @@ import * as MP from "@bandaloo/merge-pass";
 import * as dat from "dat.gui";
 import * as A from "./exampleanimations";
 import * as P from "./index";
-import { celshade, CelShade } from "./celshade";
 
 const slow = false;
 
@@ -272,8 +271,8 @@ const demos: Demos = {
   },
 
   celshade: (channels: TexImageSource[] = []) => {
-    let cs: CelShade;
-    const merger = new MP.Merger([(cs = celshade())], sourceCanvas, gl, {
+    let cs: P.CelShade;
+    const merger = new MP.Merger([(cs = P.celshade())], sourceCanvas, gl, {
       channels: channels,
     });
 
