@@ -36,6 +36,6 @@
   },
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@bandaloo/merge-pass": "^0.6.3"
+    "@bandaloo/merge-pass": "^0.6.4"
   }
 }
